@@ -1,0 +1,60 @@
+{
+    "name": "vscode-jscad-editor",
+    "displayName": "vscode-jscad-editor",
+    "description": "An experiment to use VSCode for editing and viewing JSCAD files",
+    "version": "0.0.1",
+    "publisher": "ryx",
+    "engines": {
+        "vscode": "^1.28.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onLanguage:jscad",
+        "onCommand:extension.sayHello",
+        "onCommand:jscadEditor.start",
+		"onCommand:jscadEditor.doRefactor",
+        "onWebviewPanel:jscadEditor"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "configurationDefaults": {
+
+        },
+        "commands": [
+            {
+				"command": "jscadEditor.openPreview",
+				"title": "Preview JSCAD",
+				"category": "JSCAD Preview"
+			}
+        ],
+        "languages": [
+            {
+                "id": "javascript",
+                "extensions": [".jscad"]
+            }
+        ],
+        "menus": {
+            "editor/title": [{
+                "when": "resourceExtname == .jscad",
+                "command": "jscadEditor.openPreview",
+                "group": "navigation"
+            }]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.21",
+        "tslint": "^5.8.0",
+        "@types/node": "^8.10.25",
+        "@types/mocha": "^2.2.42"
+    }
+}
