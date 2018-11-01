@@ -10,9 +10,9 @@ This prototype is the result of a bored afternoon, after I got my new 3D printer
 
 Being a bit underwhelmed by existing editing solutions available for both, I decided to connect VSCode and JSCAD, while at the same time getting my hands dirty with extension development for VSCode. This is what came out. Yay!
 
-This screenshot shows the editor on the left and the interactive JSCAD preview on the right. Changing anything in the code causes immediate updates in the preview. (Well .. Yes, maybe I should make a screencast ;) .. but believe me, it's awesome)
+This screencast shows the editor on the left and the interactive JSCAD preview on the right. Changing anything in the code causes immediate updates in the preview.
 
-![JSCAD Preview Screenshot](./screenshot-1.png)
+![JSCAD Preview Screenshot](./jscad-screencast-2.gif)
 
 ## Usage
 
