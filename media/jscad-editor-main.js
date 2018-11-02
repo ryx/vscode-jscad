@@ -18,6 +18,6 @@
   window.addEventListener('resize', function () {
     var canvas = document.querySelector('#viewerContext canvas');
     canvas.width = window.innerWidth;
-    canvas.width = window.innerHeight;
+    canvas.height = window.innerHeight;
   });
 }(acquireVsCodeApi()));

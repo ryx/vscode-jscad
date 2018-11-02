@@ -3,9 +3,9 @@
  */
 
  html, body {
-   margin: 0;
-   padding: 0;
-
+  margin: 0;
+  padding: 0;
+  height: 100%;
  }
  .jscad-container {
   margin: 0; /* not inherited */
@@ -15,7 +15,7 @@
   font-family: Helvetica, Arial, Sans;
   border: none;
   min-width: 410px;
-  min-height: 410px;
+  height: 100%;
 }
 
 #header {
@@ -39,14 +39,14 @@
 
   background: white;
   width:  100%;
-  min-height:  500px;
+  height: 100%;
 
   top: 0px;
   bottom: 0px;
 }
 
 .viewer {
-  min-height: 550px;
+  height: 100%;
 }
 
 canvas {
