@@ -4,8 +4,6 @@ import {
   DiagnosticSeverity,
   Disposable,
   TextEditor,
-  Diagnostic,
-  DiagnosticCollection,
 } from 'vscode';
 import JSCADPreviewPanel from './JSCADPreviewPanel';
 
@@ -35,9 +33,7 @@ export default class JSCADEditorController {
 
   private _editorHasError(editor: TextEditor) {
     const diagnostics = languages.getDiagnostics(editor.document.uri);
-    console.log(diagnostics);
     const errorList = diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
-    console.log(errorList);
 
     // @HACK: ignore single stylelint error showing up for some strange reason
     // see https://github.com/stylelint/stylelint/issues/3434
