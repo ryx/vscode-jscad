@@ -11,36 +11,38 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:jscad",
+        "onLanguage:javascript",
         "onCommand:extension.sayHello",
         "onCommand:jscadEditor.start",
-		"onCommand:jscadEditor.doRefactor",
+        "onCommand:jscadEditor.doRefactor",
         "onWebviewPanel:jscadEditor"
     ],
     "main": "./out/extension",
     "contributes": {
-        "configurationDefaults": {
-
-        },
+        "configurationDefaults": {},
         "commands": [
             {
-				"command": "jscadEditor.openPreview",
-				"title": "Preview JSCAD",
-				"category": "JSCAD Preview"
-			}
+                "command": "jscadEditor.openPreview",
+                "title": "Preview JSCAD",
+                "category": "JSCAD Preview"
+            }
         ],
         "languages": [
             {
                 "id": "javascript",
-                "extensions": [".jscad"]
+                "extensions": [
+                    ".jscad"
+                ]
             }
         ],
         "menus": {
-            "editor/title": [{
-                "when": "resourceExtname == .jscad",
-                "command": "jscadEditor.openPreview",
-                "group": "navigation"
-            }]
+            "editor/title": [
+                {
+                    "when": "resourceExtname == .jscad",
+                    "command": "jscadEditor.openPreview",
+                    "group": "navigation"
+                }
+            ]
         }
     },
     "scripts": {
