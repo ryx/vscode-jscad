@@ -32,6 +32,21 @@
   color: #ffffff;
 }
 
+#statusspan {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 3px;
+  background: rgba(220, 220, 220, 0.75);
+  font-weight: normal;
+}
+
+#statusbuttons {
+  display: none;
+}
+
+
 #viewerContext {
   margin: 0; /* not inherited */
   border: thin solid gray; /* not inherited */

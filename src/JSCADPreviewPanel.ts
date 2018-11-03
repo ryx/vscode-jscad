@@ -2,6 +2,8 @@ import * as path from 'path';
 import {
   window,
   Disposable,
+  StatusBarItem,
+  StatusBarAlignment,
   Uri,
   ViewColumn,
   WebviewPanel,
@@ -21,6 +23,8 @@ export default class JSCADPreviewPanel {
   private readonly _panel: WebviewPanel;
   private readonly _extensionPath: string;
   private _disposables: Disposable[] = [];
+
+  private _statusBarItem: StatusBarItem =  window.createStatusBarItem(StatusBarAlignment.Left);
 
   public static createOrShow(extensionPath: string) {
       const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
@@ -42,17 +46,31 @@ export default class JSCADPreviewPanel {
           ] */
       });
 
-      // add message handling
-      panel.webview.onDidReceiveMessage(message => {
-        switch (message.command) {
-            case 'alert':
-                window.showErrorMessage(message.data);
-                return;
-        }
-      });
-
       JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath);
   }
+
+  public updateStatusbar(status: string) {
+
+    // Get the current text editor
+    let editor = window.activeTextEditor;
+    if (!editor) {
+        this._statusBarItem.hide();
+        return;
+    }
+
+    let doc = editor.document;
+
+    // Only update status if a Markdown file
+    if (doc.languageId === "javascript") {
+        // Update the status bar
+        this._statusBarItem.text = `JSCAD: ${status}`;
+        this._statusBarItem.tooltip = 'JSCAD processor status';
+        this._statusBarItem.command = 'jscadEditor.openPreview';
+        this._statusBarItem.show();
+    } else {
+        this._statusBarItem.hide();
+    }
+}
 
   public static revive(panel: WebviewPanel, extensionPath: string) {
       JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath);
@@ -83,11 +101,20 @@ export default class JSCADPreviewPanel {
 
       // Handle messages from the webview
       this._panel.webview.onDidReceiveMessage(message => {
-          switch (message.command) {
-              case 'alert':
-                  window.showErrorMessage(message.text);
-                  return;
-          }
+        switch (message.command) {
+            case 'initialized':
+                // this._update();
+                // @TODO: update according to editor contents
+                break;
+            case 'alert':
+                window.showErrorMessage(message.text);
+                break;
+            case 'status':
+                this.updateStatusbar(message.text);
+                break;
+            default:
+                window.showErrorMessage(`JSCAD: unknown command: ${message.command}`);
+        }
       }, null, this._disposables);
   }
 
@@ -96,6 +123,9 @@ export default class JSCADPreviewPanel {
 
       // Clean up our resources
       this._panel.dispose();
+      this._statusBarItem.dispose();
+
+      // @TODO: cleanup webview!
 
       while (this._disposables.length) {
           const x = this._disposables.pop();
@@ -103,6 +133,10 @@ export default class JSCADPreviewPanel {
               x.dispose();
           }
       }
+  }
+
+  public onDidInitialize() {
+
   }
 
   /**

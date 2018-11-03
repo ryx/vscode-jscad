@@ -21,7 +21,7 @@ export default class JSCADEditorController {
     window.onDidChangeActiveTextEditor(this._onEvent, this, subscriptions);
 
     // initially update the view
-    this._onEvent();
+    // this._onEvent();
 
     // create a combined disposable from both event subscriptions
     this._disposable = Disposable.from(...subscriptions);
@@ -51,8 +51,9 @@ export default class JSCADEditorController {
       if (editor) {
         if (this._editorHasError(editor)) {
           window.showErrorMessage('Not updating because of code error');
+        } else {
+          panel.setJscadData(editor.document.getText());
         }
-        panel.setJscadData(editor.document.getText());
       }
     }
   }
