@@ -27,14 +27,16 @@ In VSCode press `F5` to start an editor session with the extension loaded. Then 
 
 ## Known Issues
 
-- export/save not working (needs more investigation)
-- JSCAD web editor is currently highly incompatible with my chosen approach of using a postMessage API to trigger any kind of actions inside the preview .. (might look into JSCAD.org if I find the time)
-- JSCAD editor height adjustment not working smoothly
-- high chance of memory leaks because nothing is properly cleaned or disposed yet
+- JSCAD viewer is still the default "viewer-options.html" from jscad web build; should create a custom build and use the Processor directly instead, using a real application build
+- view presets (top/left/front/...) are a bit stupid and often too close or too far away; should calculate the optimal view distance instead
+- high chance of memory leaks because some things are not properly cleaned or disposed yet
 
 ## Release Notes
+
+### 0.0.2
+
+Now with improved viewer panel, JSCAD > STL export command, statusbar output and basic error messages.
 
 ### 0.0.1
 
 Initial prototype
-
