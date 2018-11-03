@@ -24,7 +24,12 @@
             {
                 "command": "jscadEditor.openPreview",
                 "title": "Preview JSCAD",
-                "category": "JSCAD Preview"
+                "category": "JSCAD"
+            },
+            {
+                "command": "jscadEditor.exportAsSTL",
+                "title": "Export JSCAD as STL",
+                "category": "JSCAD"
             }
         ],
         "languages": [
