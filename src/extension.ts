@@ -7,8 +7,18 @@ import JSCADPreviewPanel from './JSCADPreviewPanel';
 export function activate(context: vscode.ExtensionContext) {
     console.log('vscode-jscad-editor active');
 
+    // create and register our editor controller
+    const controller = new JSCADEditorController();
+    context.subscriptions.push(controller);
+
+    // add commands
     context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.openPreview', () => {
-        JSCADPreviewPanel.createOrShow(context.extensionPath);
+        const panel = JSCADPreviewPanel.createOrShow(context.extensionPath);
+
+        panel.onDidInitialize(() => {
+            vscode.window.showInformationMessage('JSCAD Viewer initialized!');
+            controller.updatePanelWithEditorData()
+        });
     }));
 
     if (vscode.window.registerWebviewPanelSerializer) {
@@ -20,10 +30,6 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
     }
-
-    // create and register our editor controller
-    const controller = new JSCADEditorController();
-    context.subscriptions.push(controller);
 }
 
 // this method is called when your extension is deactivated

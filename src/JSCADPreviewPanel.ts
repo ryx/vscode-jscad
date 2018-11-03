@@ -26,13 +26,13 @@ export default class JSCADPreviewPanel {
 
   private _statusBarItem: StatusBarItem =  window.createStatusBarItem(StatusBarAlignment.Left);
 
-  public static createOrShow(extensionPath: string) {
+  public static createOrShow(extensionPath: string): JSCADPreviewPanel {
       const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
 
       // If we already have a panel, show it.
       if (JSCADPreviewPanel.currentPanel) {
           JSCADPreviewPanel.currentPanel._panel.reveal(column);
-          return;
+          return JSCADPreviewPanel.currentPanel;
       }
 
       // Otherwise, create a new panel.
@@ -47,30 +47,9 @@ export default class JSCADPreviewPanel {
       });
 
       JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath);
+
+      return JSCADPreviewPanel.currentPanel;
   }
-
-  public updateStatusbar(status: string) {
-
-    // Get the current text editor
-    let editor = window.activeTextEditor;
-    if (!editor) {
-        this._statusBarItem.hide();
-        return;
-    }
-
-    let doc = editor.document;
-
-    // Only update status if a Markdown file
-    if (doc.languageId === "javascript") {
-        // Update the status bar
-        this._statusBarItem.text = `JSCAD: ${status}`;
-        this._statusBarItem.tooltip = 'JSCAD processor status';
-        this._statusBarItem.command = 'jscadEditor.openPreview';
-        this._statusBarItem.show();
-    } else {
-        this._statusBarItem.hide();
-    }
-}
 
   public static revive(panel: WebviewPanel, extensionPath: string) {
       JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath);
@@ -118,6 +97,28 @@ export default class JSCADPreviewPanel {
       }, null, this._disposables);
   }
 
+  public updateStatusbar(status: string) {
+    // Get the current text editor
+    let editor = window.activeTextEditor;
+    if (!editor) {
+        this._statusBarItem.hide();
+        return;
+    }
+
+    let doc = editor.document;
+
+    // Only update status if a Markdown file
+    if (doc.languageId === "javascript") {
+        // Update the status bar
+        this._statusBarItem.text = `JSCAD: ${status}`;
+        this._statusBarItem.tooltip = 'JSCAD processor status';
+        this._statusBarItem.command = 'jscadEditor.openPreview';
+        this._statusBarItem.show();
+    } else {
+        this._statusBarItem.hide();
+    }
+  }
+
   public dispose() {
       JSCADPreviewPanel.currentPanel = undefined;
 
@@ -135,8 +136,8 @@ export default class JSCADPreviewPanel {
       }
   }
 
-  public onDidInitialize() {
-
+  public onDidInitialize(callback: Function) {
+    callback();
   }
 
   /**
@@ -184,11 +185,18 @@ export default class JSCADPreviewPanel {
                   <div id="errordiv"></div>
               </div>
 
+              <div id="jscad-viewer-controls">
+                <a class="jscad-viewer-button" data-action-viewport="scene">3D</a>
+                <a class="jscad-viewer-button" data-action-viewport="top">TOP</a>
+                <a class="jscad-viewer-button" data-action-viewport="front">FRONT</a>
+                <a class="jscad-viewer-button" data-action-viewport="left">LEFT</a>
+              </div>
+
               <!-- setup display of the viewer, i.e. canvas -->
               <div id="viewerContext"></div>
 
               <!-- setup display of the status, as required by OpenJSCAD.js -->
-              <div id="tail" style="display: block;">
+              <div id="tail" style="display: none;">
                   <div id="statusdiv"></div>
               </div>
           </div>

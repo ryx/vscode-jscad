@@ -20,11 +20,22 @@ export default class JSCADEditorController {
     window.onDidChangeTextEditorSelection(this._onEvent, this, subscriptions);
     window.onDidChangeActiveTextEditor(this._onEvent, this, subscriptions);
 
-    // initially update the view
-    // this._onEvent();
-
     // create a combined disposable from both event subscriptions
     this._disposable = Disposable.from(...subscriptions);
+  }
+
+  public updatePanelWithEditorData() {
+    const panel = JSCADPreviewPanel.currentPanel;
+    if (panel) {
+      const editor = window.activeTextEditor;
+      if (editor) {
+        if (this._editorHasError(editor)) {
+          window.showErrorMessage('Not updating because of code error');
+        } else {
+          panel.setJscadData(editor.document.getText());
+        }
+      }
+    }
   }
 
   dispose() {
@@ -45,16 +56,6 @@ export default class JSCADEditorController {
   }
 
   private _onEvent() {
-    const panel = JSCADPreviewPanel.currentPanel;
-    if (panel) {
-      const editor = window.activeTextEditor;
-      if (editor) {
-        if (this._editorHasError(editor)) {
-          window.showErrorMessage('Not updating because of code error');
-        } else {
-          panel.setJscadData(editor.document.getText());
-        }
-      }
-    }
+    this.updatePanelWithEditorData();
   }
 }
