@@ -10,7 +10,7 @@ export default class JSCADExporter {
     this._channel = vscode.window.createOutputChannel('JSCAD Export');
   }
 
-  async command(commandLine: string) {
+  async command(commandLine: string): Promise<boolean> {
     try {
       let { stdout, stderr } = await this._exec(commandLine, { cwd: this._extensionPath });
       if (stderr && stderr.length > 0) {
@@ -30,7 +30,11 @@ export default class JSCADExporter {
       }
       this._channel.appendLine('Export JSCAD as STL failed.');
       this._channel.show(true);
+
+      return false;
     }
+
+    return true;
   }
 
   // Execute child process (taken from the task-provider-sample extension)

@@ -35,7 +35,12 @@ export function activate(context: vscode.ExtensionContext) {
     if (editor && editor.document.fileName.match(/\.jscad$/i)) {
       // TODO: open file selection dialog and get desired output name
       // export it to desired format
-      exporter.command(`npx openjscad ${editor.document.fileName}`);
+      const result = await exporter.command(`npx openjscad ${editor.document.fileName}`);
+      if (result) {
+        vscode.window.showInformationMessage('JSCAD: STL export succeeded');
+      } else {
+        vscode.window.showErrorMessage('JSCAD: STL export failed (check task output for details)');
+      }
     }
   }));
 
