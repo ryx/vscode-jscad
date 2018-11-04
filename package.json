@@ -2,7 +2,7 @@
     "name": "vscode-jscad-editor",
     "displayName": "vscode-jscad-editor",
     "description": "An experiment to use VSCode for editing and viewing JSCAD files",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "ryx",
     "engines": {
         "vscode": "^1.28.0"
@@ -12,9 +12,7 @@
     ],
     "activationEvents": [
         "onLanguage:javascript",
-        "onCommand:extension.sayHello",
-        "onCommand:jscadEditor.start",
-        "onCommand:jscadEditor.doRefactor",
+        "onCommand:jscadEditor.openPreview",
         "onWebviewPanel:jscadEditor"
     ],
     "main": "./out/extension",
