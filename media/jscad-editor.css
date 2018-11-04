@@ -41,32 +41,30 @@
 }
 
 #jscad-viewer-controls {
-  display: none;
+  opacity: 0;
   user-select: none;
   position: absolute;
   bottom: 5px;
   left: 5px;
   background: var(--vscode-activityBar-background);
   box-shadow: 0 3px 3px rgba(80, 80, 80, 0.5);
-  padding: 10px;
-  opacity: 0.75;
+  padding: 5px;
   cursor: default;
 }
 
 .jscad-container:hover #jscad-viewer-controls {
-  display: block;
+  opacity: 0.75;
+  transition: all 0.3s ease-in-out;
 }
 
 .jscad-viewer-button {
-  margin-right: 5px;
+  margin: 0;
   font-size: 16px;
   color: var(--vscode-activityBar-inactiveForeground);
 }
-a.jscad-viewer-button:hover,
-a.jscad-viewer-button:link,
-a.jscad-viewer-button:active {
+.jscad-viewer-button:hover svg {
   cursor: pointer;
-  color: var(--vscode-activityBar-foreground);
+  stroke: var(--vscode-activityBar-foreground);
 }
 
 
