@@ -147,7 +147,7 @@ export default class JSCADPreviewPanel {
    */
   public setJscadData(data: string, fileName?: string) {
       this._panel.webview.postMessage({ command: 'setData', data });
-      this._panel.title = `JSCAD: Preview${fileName ? ` of ${fileName.replace(this._extensionPath, '')}` : ''}}`;
+      this._panel.title = `JSCAD: Preview${fileName ? ` of ${fileName.replace(this._extensionPath, '')}` : ''}`;
   }
 
   private _update() {

@@ -1,68 +1,75 @@
 {
-    "name": "vscode-jscad-editor",
-    "displayName": "vscode-jscad-editor",
-    "description": "An experiment to use VSCode for editing and viewing JSCAD files",
-    "version": "0.0.2",
-    "publisher": "ryx",
-    "engines": {
-        "vscode": "^1.28.0"
-    },
-    "categories": [
-        "Other"
+  "name": "vscode-jscad-editor",
+  "displayName": "vscode-jscad-editor",
+  "description": "An experiment to use VSCode for editing and viewing JSCAD files",
+  "version": "0.0.2",
+  "publisher": "ryx",
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onCommand:jscadEditor.openPreview",
+    "onWebviewPanel:jscadEditor"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "configurationDefaults": {},
+    "commands": [
+      {
+        "command": "jscadEditor.openPreview",
+        "title": "Preview JSCAD",
+        "category": "JSCAD"
+      },
+      {
+        "command": "jscadEditor.exportAsSTL",
+        "title": "Export JSCAD as STL",
+        "category": "JSCAD"
+      }
     ],
-    "activationEvents": [
-        "onLanguage:javascript",
-        "onCommand:jscadEditor.openPreview",
-        "onWebviewPanel:jscadEditor"
+    "languages": [
+      {
+        "id": "javascript",
+        "extensions": [
+          ".jscad"
+        ]
+      }
     ],
-    "main": "./out/extension",
-    "contributes": {
-        "configurationDefaults": {},
-        "commands": [
-            {
-                "command": "jscadEditor.openPreview",
-                "title": "Preview JSCAD",
-                "category": "JSCAD"
-            },
-            {
-                "command": "jscadEditor.exportAsSTL",
-                "title": "Export JSCAD as STL",
-                "category": "JSCAD"
-            }
-        ],
-        "languages": [
-            {
-                "id": "javascript",
-                "extensions": [
-                    ".jscad"
-                ]
-            }
-        ],
-        "menus": {
-            "editor/title": [
-                {
-                    "when": "resourceExtname == .jscad",
-                    "command": "jscadEditor.openPreview",
-                    "group": "navigation"
-                }
-            ]
+    "menus": {
+      "editor/title": [
+        {
+          "when": "resourceExtname == .jscad",
+          "command": "jscadEditor.openPreview",
+          "group": "navigation"
         }
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
-    },
-    "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.21",
-        "tslint": "^5.8.0",
-        "@types/node": "^8.10.25",
-        "@types/mocha": "^2.2.42"
-    },
-    "dependencies": {
-        "@jscad/cli": "^1.9.0"
+      ],
+      "explorer/context": [
+        {
+          "when": "resourceExtname == .jscad",
+          "command": "jscadEditor.exportAsSTL",
+          "group": "export"
+        }
+      ]
     }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21",
+    "tslint": "^5.8.0",
+    "@types/node": "^8.10.25",
+    "@types/mocha": "^2.2.42"
+  },
+  "dependencies": {
+    "@jscad/cli": "^1.9.0"
+  }
 }
