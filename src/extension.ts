@@ -25,6 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
   }));
 
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.exportAsSTL', async () => {
+    // @NOTE: I am unsure whether this should be a Task instead. We are actually bulding something
+    // but on the other hand this is just a simple export :-| ... should check how other extensions
+    // solve this (e.g. less/sass, etc)
+
     // get active editor
     const editor = vscode.window.activeTextEditor;
     // check if file is really a *.jscad file

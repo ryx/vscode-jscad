@@ -29,10 +29,14 @@ export default class JSCADEditorController {
     if (panel) {
       const editor = window.activeTextEditor;
       if (editor) {
-        if (this._editorHasError(editor)) {
-          window.showErrorMessage('Not updating because of code error');
-        } else {
-          panel.setJscadData(editor.document.getText());
+        const fileName = editor.document.fileName;
+        // @FIXME: use proper filename lookup pattern from config instead
+        if (fileName.match(/\.jscad$/i)) {
+          if (this._editorHasError(editor)) {
+            window.showErrorMessage('Not updating because of code error');
+          } else {
+            panel.setJscadData(editor.document.getText(), fileName);
+          }
         }
       }
     }
@@ -44,15 +48,7 @@ export default class JSCADEditorController {
 
   private _editorHasError(editor: TextEditor) {
     const diagnostics = languages.getDiagnostics(editor.document.uri);
-    const errorList = diagnostics.filter(d => d.severity === DiagnosticSeverity.Error);
-
-    // @HACK: ignore single stylelint error showing up for some strange reason
-    // see https://github.com/stylelint/stylelint/issues/3434
-    if ((errorList.length === 1 && errorList[0].source === 'stylelint')) {
-      return false;
-    }
-
-    return errorList.length > 0;
+    return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error).length > 0;
   }
 
   private _onEvent() {

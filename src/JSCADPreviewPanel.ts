@@ -36,7 +36,7 @@ export default class JSCADPreviewPanel {
       }
 
       // Otherwise, create a new panel.
-      const panel = window.createWebviewPanel(JSCADPreviewPanel.viewType, "JSCAD Preview", column || ViewColumn.Two, {
+      const panel = window.createWebviewPanel(JSCADPreviewPanel.viewType, 'JSCAD: Preview', column || ViewColumn.Two, {
           // Enable javascript in the webview
           enableScripts: true,
 
@@ -143,9 +143,11 @@ export default class JSCADPreviewPanel {
   /**
    * Set the JSCAD data inside the viewer.
    * @param data JSCAD code to be executed
+   * @param fileName Filename shown inside the preview
    */
-  public setJscadData(data: string) {
+  public setJscadData(data: string, fileName?: string) {
       this._panel.webview.postMessage({ command: 'setData', data });
+      this._panel.title = `JSCAD: Preview${fileName ? ` of ${fileName.replace(this._extensionPath, '')}` : ''}}`;
   }
 
   private _update() {
