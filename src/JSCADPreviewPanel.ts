@@ -1,14 +1,12 @@
 import * as path from 'path';
 import {
   window,
-  workspace,
   Disposable,
   StatusBarItem,
   StatusBarAlignment,
   Uri,
   ViewColumn,
   WebviewPanel,
-  ThemeColor,
 } from 'vscode';
 
 /**
@@ -148,7 +146,7 @@ export default class JSCADPreviewPanel {
    * @param fileName Filename shown inside the preview
    */
   public setJscadData(data: string, fileName?: string) {
-      this._panel.webview.postMessage({ command: 'setData', data });
+      this._panel.webview.postMessage({ command: 'setData', data: { data, fileName } });
       this._panel.title = `JSCAD: Preview${fileName ? ` of ${fileName.replace(this._extensionPath, '')}` : ''}`;
   }
 
@@ -160,7 +158,8 @@ export default class JSCADPreviewPanel {
 
       // Local path to main script run in the webview
       const jscadCoreScript = Uri.file(path.join(this._extensionPath, 'media', 'dist/jscad-web-opt.js'));
-      const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor-main.js'));
+      const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'main.mjs'));
+      // const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor-main.js'));
       const jscadEditorCSS = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor.css'));
 
       // And the uri we use to load this script in the webview
@@ -198,7 +197,7 @@ export default class JSCADPreviewPanel {
               </div>
 
               <div id="jscad-viewer-controls">
-                <div class="jscad-viewer-button" data-action-viewport="scene" title="Reset to perspective view">
+                <div class="jscad-viewer-button jscad-viewer-button-scene" data-action-viewport="scene" title="Reset to perspective view">
                   <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="3D" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                       <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -211,7 +210,7 @@ export default class JSCADPreviewPanel {
                     </g>
                   </svg>
                 </div>
-                <div class="jscad-viewer-button" data-action-viewport="top" title="View from top (look down Z axis)">
+                <div class="jscad-viewer-button jscad-viewer-button-top" data-action-viewport="top" title="View from top (look down Z axis)">
                   <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="View_Top" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                       <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -221,7 +220,7 @@ export default class JSCADPreviewPanel {
                     </g>
                   </svg>
                 </div>
-                <div class="jscad-viewer-button" data-action-viewport="front" title="View from front (look along X axis)">
+                <div class="jscad-viewer-button jscad-viewer-button-front" data-action-viewport="front" title="View from front (look along X axis)">
                   <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="View_Front" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                       <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -232,7 +231,7 @@ export default class JSCADPreviewPanel {
                     </g>
                   </svg>
                 </div>
-                <div class="jscad-viewer-button" data-action-viewport="left" title="View from left (look along Y axis)">
+                <div class="jscad-viewer-button jscad-viewer-button-left" data-action-viewport="left" title="View from left (look along Y axis)">
                   <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <g id="View_Left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                       <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -255,7 +254,8 @@ export default class JSCADPreviewPanel {
           </div>
 
           <script nonce="${nonce}" src="${coreScriptUri}"></script>
-          <script nonce="${nonce}" src="${editorScriptUri}"></script>
+          <!-- <script nonce="${nonce}" src="${editorScriptUri}"></script> -->
+          <script nonce="${nonce}" type="module" src="${editorScriptUri}"></script>
       </body>
 
       </html>`;
