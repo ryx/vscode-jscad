@@ -35,7 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
     if (editor && editor.document.fileName.match(/\.jscad$/i)) {
       // TODO: open file selection dialog and get desired output name
       // export it to desired format
-      const result = await exporter.command(`npx openjscad ${editor.document.fileName}`);
+      const result = await exporter.command(`npx openjscad "${editor.document.fileName}"`);
       if (result) {
         vscode.window.showInformationMessage('JSCAD: STL export succeeded');
       } else {
@@ -48,9 +48,8 @@ export function activate(context: vscode.ExtensionContext) {
     // Make sure we register a serilizer in activation event
     vscode.window.registerWebviewPanelSerializer(JSCADPreviewPanel.viewType, {
       async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
-        console.log(`Got state: ${state}`);
-        JSCADPreviewPanel.revive(webviewPanel, context.extensionPath);
-        // @TODO: store/restore viewwport coordinates as JSON object
+        console.log(`Got state ${state}`);
+        JSCADPreviewPanel.revive(webviewPanel, context.extensionPath, state);
       }
     });
   }

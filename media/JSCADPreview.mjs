@@ -15,8 +15,8 @@ export default class JSCADPreview {
     this.vscode = vscode;
     this.processor = processor;
     this.viewer = processor.viewer;
-    this.settingsCache = {};
     this.currentFileName = null;
+    this.settingsCache = vscode.getState() || {};
 
     // register our postMessage handler to receive messages from the extension in VSCode
     window.addEventListener('message', (event) => {
@@ -119,9 +119,12 @@ export default class JSCADPreview {
    */
   setJSCADData(data, fileName) {
     this.processor.setJsCad(data);
-    // save current settings (if any)
+    // save current settings (if a file is loaded)
     if (this.currentFileName) {
+      console.log('saving viewport settings');
       this.settingsCache[this.currentFileName] = this.getViewportSettings();
+      // and store entire state in VSCode
+      this.vscode.setState(this.settingsCache);
     }
     // restore settings for new file
     if (typeof this.settingsCache[fileName] !== 'undefined') {
