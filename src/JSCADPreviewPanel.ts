@@ -155,7 +155,7 @@ export default class JSCADPreviewPanel {
 
     this._panel.webview.postMessage({ command: 'setData', data: { data, fileName } });
     this._panel.title = `Preview${fileName ? ` of ${displayName}` : ''}`;
-    this._panel.iconPath = Uri.file(path.join(this._extensionPath, 'resources', 'Icon_View_3D.svg'));
+    this._panel.iconPath = Uri.file(path.join(this._extensionPath, 'resources', 'Icon_View_Empty.svg'));
   }
 
   private _update(state: any = {}) {
@@ -204,51 +204,10 @@ export default class JSCADPreviewPanel {
         </div>
 
         <div id="jscad-viewer-controls">
-        <div class="jscad-viewer-button jscad-viewer-button-scene" data-action-viewport="scene" title="Reset to perspective view">
-          <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="3D" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-            <polygon id="Rectangle" fill="#FFFFFF" transform="translate(80.000000, 71.500000) scale(-1, 1) translate(-80.000000, -71.500000) " points="66 47 94 61 94 96 66 82"></polygon>
-            <polygon id="Face_Top" fill="#FFFFFF" points="60 23 86 36 60 49 34 36"></polygon>
-            <path d="M20.5,36.809017 L20.5,85.690983 L59.5,105.190983 L59.5,56.309017 L20.5,36.809017 Z" id="Face_Front" stroke="#FFFFFF"></path>
-            <path d="M60,16.559017 L21.118034,36 L60,55.440983 L98.881966,36 L60,16.559017 Z" id="Face_Top" stroke="#FFFFFF"></path>
-            <path d="M60.5,36.809017 L60.5,85.690983 L99.5,105.190983 L99.5,56.309017 L60.5,36.809017 Z" id="Face_Right" stroke="#FFFFFF" transform="translate(80.000000, 71.000000) scale(-1, 1) translate(-80.000000, -71.000000) "></path>
-            <polygon id="Rectangle" fill="#FFFFFF" points="26 47 54 61 54 96 26 82"></polygon>
-          </g>
-          </svg>
-        </div>
-        <div class="jscad-viewer-button jscad-viewer-button-top" data-action-viewport="top" title="View from top (look down Z axis)">
-          <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="View_Top" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M20.5,36.809017 L20.5,85.690983 L59.5,105.190983 L59.5,56.309017 L20.5,36.809017 Z" id="Face_Front" stroke="#FFFFFF"></path>
-            <polygon id="Face_Top" fill="#FFFFFF" points="60 22 88 36 60 50 32 36"></polygon>
-            <path d="M60.5,36.809017 L60.5,85.690983 L99.5,105.190983 L99.5,56.309017 L60.5,36.809017 Z" id="Face_Right" stroke="#FFFFFF" transform="translate(80.000000, 71.000000) scale(-1, 1) translate(-80.000000, -71.000000) "></path>
-          </g>
-          </svg>
-        </div>
-        <div class="jscad-viewer-button jscad-viewer-button-front" data-action-viewport="front" title="View from front (look along X axis)">
-          <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="View_Front" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M20.5,36.809017 L20.5,85.690983 L59.5,105.190983 L59.5,56.309017 L20.5,36.809017 Z" id="Face_Front" stroke="#FFFFFF"></path>
-            <path d="M60,16.559017 L21.118034,36 L60,55.440983 L98.881966,36 L60,16.559017 Z" id="Face_Top" stroke="#FFFFFF"></path>
-            <path d="M60.5,36.809017 L60.5,85.690983 L99.5,105.190983 L99.5,56.309017 L60.5,36.809017 Z" id="Face_Right" stroke="#FFFFFF" transform="translate(80.000000, 71.000000) scale(-1, 1) translate(-80.000000, -71.000000) "></path>
-            <polygon id="Rectangle" fill="#FFFFFF" points="26 47 54 61 54 96 26 82"></polygon>
-          </g>
-          </svg>
-        </div>
-        <div class="jscad-viewer-button jscad-viewer-button-left" data-action-viewport="left" title="View from left (look along Y axis)">
-          <svg width="32px" height="32px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="View_Left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M20.5,36.809017 L20.5,85.690983 L59.5,105.190983 L59.5,56.309017 L20.5,36.809017 Z" id="Face_Front" stroke="#FFFFFF"></path>
-            <path d="M60,16.559017 L21.118034,36 L60,55.440983 L98.881966,36 L60,16.559017 Z" id="Face_Top" stroke="#FFFFFF"></path>
-            <path d="M60.5,36.809017 L60.5,85.690983 L99.5,105.190983 L99.5,56.309017 L60.5,36.809017 Z" id="Face_Right" stroke="#FFFFFF" transform="translate(80.000000, 71.000000) scale(-1, 1) translate(-80.000000, -71.000000) "></path>
-            <polygon id="Rectangle" fill="#FFFFFF" transform="translate(80.000000, 71.500000) scale(-1, 1) translate(-80.000000, -71.500000) " points="66 47 94 61 94 96 66 82"></polygon>
-          </g>
-          </svg>
-        </div>
+          <div class="jscad-viewer-button jscad-viewer-button-scene" data-action-viewport="scene" title="Reset to perspective view"></div>
+          <div class="jscad-viewer-button jscad-viewer-button-top" data-action-viewport="top" title="View from top (look down Z axis)"></div>
+          <div class="jscad-viewer-button jscad-viewer-button-front" data-action-viewport="front" title="View from front (look along X axis)"></div>
+          <div class="jscad-viewer-button jscad-viewer-button-right" data-action-viewport="right" title="View from right (look along Y axis)"></div>
         </div>
 
         <!-- setup display of the viewer, i.e. canvas -->

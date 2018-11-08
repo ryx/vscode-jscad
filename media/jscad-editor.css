@@ -62,15 +62,29 @@
   width: 32px;
   height: 32px;
   font-size: 16px;
-  color: var(--vscode-activityBar-inactiveForeground);
+  cursor: pointer;
+  /* color: var(--vscode-activityBar-inactiveForeground); */
 }
-.jscad-viewer-button:hover svg {
+/* .jscad-viewer-button:hover svg {
   cursor: pointer;
   stroke: var(--vscode-activityBar-foreground);
-}
-/* .jscad-viewer-button-scene {
-  background: url(../resources/Icon_View_3D.svg);
 } */
+.jscad-viewer-button svg {
+  width: 100% !important;
+  height: auto !important;
+}
+.jscad-viewer-button-scene {
+  background: url(../resources/Icon_View_Empty.svg);
+}
+.jscad-viewer-button-top {
+  background: url(../resources/Icon_View_Top.svg);
+}
+.jscad-viewer-button-front {
+  background: url(../resources/Icon_View_Front.svg);
+}
+.jscad-viewer-button-right {
+  background: url(../resources/Icon_View_Right.svg);
+}
 
 
 #viewerContext {

@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="128px" height="128px" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="background: #9B9B9B;">
-    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon_View_Top</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Top" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <path d="M60,108.236068 L18,87.236068 L18,34.763932 L60,13.763932 L102,34.763932 L102,87.236068 L60,108.236068 Z" id="Background" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-        <path d="M20.5,36.809017 L20.5,85.690983 L59.5,105.190983 L59.5,56.309017 L20.5,36.809017 Z" id="Face_Front" stroke="#FFFFFF"></path>
-        <polygon id="Face_Top" fill="#FFFFFF" points="60 22 88 36 60 50 32 36"></polygon>
-        <path d="M60.5,36.809017 L60.5,85.690983 L99.5,105.190983 L99.5,56.309017 L60.5,36.809017 Z" id="Face_Right" stroke="#FFFFFF" transform="translate(80.000000, 71.000000) scale(-1, 1) translate(-80.000000, -71.000000) "></path>
-    </g>
-</svg>
+<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><path d="M60 108.236l-42-21V34.764l42-21 42 21v52.472l-42 21z" stroke="#FFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.5 36.809v48.882l39 19.5V56.309l-39-19.5z" stroke="#FFF"/><path fill="#FFF" d="M60 22l28 14-28 14-28-14z"/><path d="M99.5 36.809v48.882l-39 19.5V56.309l39-19.5z" stroke="#FFF"/></g></svg>
