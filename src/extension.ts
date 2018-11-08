@@ -17,11 +17,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   // add commands
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.openPreview', () => {
+    console.log('jscadEditor.openPreview: command runs');
     const panel = JSCADPreviewPanel.createOrShow(context.extensionPath);
-    panel.onDidInitialize(() => {
-      vscode.window.showInformationMessage('JSCAD Viewer initialized!');
-      controller.updatePanelWithEditorData();
-    });
   }));
 
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.exportAsSTL', async () => {
@@ -48,8 +45,13 @@ export function activate(context: vscode.ExtensionContext) {
     // Make sure we register a serilizer in activation event
     vscode.window.registerWebviewPanelSerializer(JSCADPreviewPanel.viewType, {
       async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
-        console.log(`Got state ${state}`);
-        JSCADPreviewPanel.revive(webviewPanel, context.extensionPath, state);
+        console.log(`JSCADPreview activate: restore state ${state}`);
+        const panel = JSCADPreviewPanel.revive(webviewPanel, context.extensionPath, state);
+        panel.onDidInitialize(e => {
+          console.log('INIT DONE');
+          vscode.window.showInformationMessage('JSCAD Viewer initialized!');
+          controller.updatePanelWithEditorData();
+        });
       }
     });
   }

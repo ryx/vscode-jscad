@@ -19,16 +19,7 @@ export default class JSCADPreview {
     this.settingsCache = vscode.getState() || {};
 
     // register our postMessage handler to receive messages from the extension in VSCode
-    window.addEventListener('message', (event) => {
-      var msg = event.data;
-      switch (msg.command) {
-        case 'setData':
-          this.setJSCADData(msg.data.data, msg.data.fileName);
-          break;
-        default:
-          this.sendMessageToVSCode('alert', 'Unknown command: ' + JSON.stringify(msg));
-      }
-    });
+    window.addEventListener('message', event => this.onReceiveMessage(event));
 
     // resize handling
     window.addEventListener('resize', () => this.viewer.resizeCanvas());
@@ -68,7 +59,21 @@ export default class JSCADPreview {
     // init
     this.setViewerBGColor(0.2, 0.2, 0.2, 1);  // @FIXME: take from options instead
     this.applyInitialViewerOptions();
+
+    // notify webview about being ready
     this.sendMessageToVSCode('initialized');
+  }
+
+  onReceiveMessage() {
+    var msg = event.data;
+    console.log('JSCADPreview: receiving message', msg);
+    switch (msg.command) {
+      case 'setData':
+        this.setJSCADData(msg.data.data, msg.data.fileName);
+        break;
+      default:
+        this.sendMessageToVSCode('alert', 'Unknown command: ' + JSON.stringify(msg));
+    }
   }
 
   applyInitialViewerOptions() {
@@ -90,7 +95,8 @@ export default class JSCADPreview {
   /**
    * Send a message to the extension in VSCode
    */
-  sendMessageToVSCode(command, text) {
+  sendMessageToVSCode(command, text = '') {
+    console.log('JSCADPreview: sending message', { command, text });
     this.vscode.postMessage({ command, text });
   }
 

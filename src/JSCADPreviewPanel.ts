@@ -7,6 +7,8 @@ import {
   Uri,
   ViewColumn,
   WebviewPanel,
+  Event,
+  EventEmitter,
 } from 'vscode';
 
 /**
@@ -17,14 +19,15 @@ export default class JSCADPreviewPanel {
    * Track the currently panel. Only allow a single panel to exist at a time.
    */
   public static currentPanel: JSCADPreviewPanel | undefined;
-
   public static readonly viewType = 'jscadEditor';
 
   private readonly _panel: WebviewPanel;
   private readonly _extensionPath: string;
   private _disposables: Disposable[] = [];
-
   private _statusBarItem: StatusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
+
+  protected _onDidInitialize = new EventEmitter();
+	readonly onDidInitialize: Event<any> = this._onDidInitialize.event;
 
   public static createOrShow(extensionPath: string): JSCADPreviewPanel {
     const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
@@ -51,8 +54,10 @@ export default class JSCADPreviewPanel {
     return JSCADPreviewPanel.currentPanel;
   }
 
-  public static revive(panel: WebviewPanel, extensionPath: string, state: any) {
+  public static revive(panel: WebviewPanel, extensionPath: string, state: any): JSCADPreviewPanel {
     JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath, state);
+
+    return JSCADPreviewPanel.currentPanel;
   }
 
   private constructor(
@@ -81,10 +86,12 @@ export default class JSCADPreviewPanel {
 
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(message => {
+      console.log('JSCACPreviewPanel: received message', message);
       switch (message.command) {
         case 'initialized':
-          // this._update();
-          // @TODO: update according to editor contents
+          // send event as soon as viewer application in webview is ready
+          console.log('command: initialize');
+          this._onDidInitialize.fire({});
           break;
         case 'alert':
           window.showErrorMessage(message.text);
@@ -126,6 +133,7 @@ export default class JSCADPreviewPanel {
     // Clean up our resources
     this._panel.dispose();
     this._statusBarItem.dispose();
+    this._onDidInitialize.dispose();
 
     // @TODO: cleanup othe resources    !
 
@@ -137,25 +145,24 @@ export default class JSCADPreviewPanel {
     }
   }
 
-  public onDidInitialize(callback: Function) {
-    callback();
-  }
-
   /**
    * Set the JSCAD data inside the viewer.
    * @param data JSCAD code to be executed
    * @param fileName Filename shown inside the preview
    */
   public setJscadData(data: string, fileName?: string) {
+    const displayName: string = fileName ? path.basename(fileName) : '';
+
     this._panel.webview.postMessage({ command: 'setData', data: { data, fileName } });
-    this._panel.title = `JSCAD: Preview${fileName ? ` of ${fileName.replace(this._extensionPath, '')}` : ''}`;
+    this._panel.title = `Preview${fileName ? ` of ${displayName}` : ''}`;
+    this._panel.iconPath = Uri.file(path.join(this._extensionPath, 'resources', 'Icon_View_3D.svg'));
   }
 
-  private _update(state: any) {
+  private _update(state: any = {}) {
     this._panel.webview.html = this._getHtmlForWebview(state);
   }
 
-  private _getHtmlForWebview(state: any) {
+  private _getHtmlForWebview(state: any = {}) {
     // Local path to main script run in the webview
     const jscadCoreScript = Uri.file(path.join(this._extensionPath, 'media', 'dist/jscad-web-opt.js'));
     const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'main.mjs'));
