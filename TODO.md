@@ -1,7 +1,6 @@
 # Unsorted TODOs
 
 TODO:
-- debouncing to reduce frequency of view updates
 - send global error messages to VSCode console instead of displaying them inside the "red box"
 - improve command handling and converter integration
 - do not show empty view when no file is loaded (maybe show some preload/waiting content instead)

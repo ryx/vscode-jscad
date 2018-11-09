@@ -5,6 +5,7 @@ import {
   Disposable,
   TextEditor,
 } from 'vscode';
+import { debounce } from 'debounce';
 import JSCADPreviewPanel from './JSCADPreviewPanel';
 
 /**
@@ -13,6 +14,9 @@ import JSCADPreviewPanel from './JSCADPreviewPanel';
 export default class JSCADEditorController {
 
   private _disposable: Disposable;
+  private _updateHandle: (() => void) & {
+    clear(): void;
+  } | undefined;
 
   constructor() {
     // subscribe to selection change and editor activation events
@@ -22,6 +26,9 @@ export default class JSCADEditorController {
 
     // create a combined disposable from both event subscriptions
     this._disposable = Disposable.from(...subscriptions);
+
+    // add debouncing to viewer update
+    this.updatePanelWithEditorData = debounce(this.updatePanelWithEditorData, 500);
   }
 
   public updatePanelWithEditorData() {
@@ -40,6 +47,7 @@ export default class JSCADEditorController {
         }
       }
     }
+    // this.updatePanelWithEditorData.clear();
   }
 
   dispose() {

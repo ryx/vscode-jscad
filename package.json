@@ -72,6 +72,8 @@
     "vscode": "^1.1.21"
   },
   "dependencies": {
-    "@jscad/cli": "^1.9.0"
+    "@jscad/cli": "^1.9.0",
+    "@types/debounce": "^3.0.0",
+    "debounce": "^1.2.0"
   }
 }
