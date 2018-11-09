@@ -15,6 +15,37 @@ export function activate(context: vscode.ExtensionContext) {
   // create our exporter (@TODO: dispose)
   const exporter = new JSCADExporter(context.extensionPath);
 
+  // add intellisense
+  const completionItems:vscode.CompletionItem[] = [
+    {
+      label: 'cube',
+      detail: `@param {object} options Object with options for this cube`,
+      documentation: 'Create a cube',
+      kind: vscode.CompletionItemKind.Function
+    },
+    { label: 'cylinder', documentation: 'A cylinder' },
+    { label: 'rotate', documentation: 'Rotate the object according to given vector (expects array with vector)' },
+    { label: 'rotateX', documentation: 'Rotate the object around the X axis (expects number)' },
+    { label: 'rotateY', documentation: 'Rotate the object around the Y axis (expects number)' },
+    { label: 'rotateZ', documentation: 'Rotate the object around the Z axis (expects number)' },
+    { label: 'sphere', documentation: 'Create a sphere' },
+    { label: 'translate', documentation: 'Move the object according to given vector (expects array)' },
+  ];
+  vscode.languages.registerCompletionItemProvider({
+    language: 'javascript',
+   }, {
+    provideCompletionItems(document, position, token, context) {
+      return completionItems;
+    },
+
+    resolveCompletionItem(item:vscode.CompletionItem, token) {
+      const extendedItems = completionItems.filter(extendedItem => extendedItem.label === item.label);
+      if (extendedItems.length > 0) {
+        return extendedItems[0];
+      }
+    }
+  });
+
   // add commands
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.openPreview', () => {
     console.log('jscadEditor.openPreview: command runs');
