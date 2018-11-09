@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
   // add commands
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.openPreview', () => {
     console.log('jscadEditor.openPreview: command runs');
-    const panel = JSCADPreviewPanel.createOrShow(context.extensionPath);
+    JSCADPreviewPanel.createOrShow(context.extensionPath);
   }));
 
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.exportAsSTL', async () => {
