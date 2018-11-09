@@ -1,13 +1,10 @@
-/*
- * min.css for OpenJSCAD.org viewer
- */
-
- html, body {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
- }
- .jscad-container {
+}
+
+.jscad-container {
   margin: 0; /* not inherited */
   padding: 0; /* not inherited */
   color: Black;
@@ -18,24 +15,25 @@
   height: 100%;
 }
 
+/* hide original JSCAD viewer elements */
 #header {
-  margin: 0; /* not inherited */
+  display: none;
 }
-
 #errordiv {
+  display: none;
+  /*
   position: absolute;
   top: 0px;
   left: 0px;
   background: #ff0000;
-  padding: 5px 5px 5px 5px;
+  padding: 0;
   margin: 0;
   color: #ffffff;
+  */
 }
-
 #statusspan {
   display: none;
 }
-
 #statusbuttons {
   display: none;
 }
@@ -86,16 +84,13 @@
 
 
 #viewerContext {
-  margin: 0; /* not inherited */
-  border: thin solid gray; /* not inherited */
-  padding: 0px; /* not inherited */
-
-  background: white;
+  margin: 0;
+  padding: 0px;
   width:  100%;
   height: 100%;
-
   top: 0px;
   bottom: 0px;
+  background: var(--vscode-editor-background);
 }
 
 .viewer {
@@ -103,24 +98,23 @@
 }
 
 canvas {
-  margin: 0px; /* not inherited */
-  border: 0px none gray; /* not inherited */
-  padding: 0px; /* not inherited */
-
   width: 100%;
   height: 100%;
-
+  margin: 0px;
+  border: 0px none gray;
+  padding: 0px;
   cursor: move;
+  background: var(--vscode-editor-background);
 }
 
 #parametersdiv {
   display: none;
-  margin: 5px; /* not inherited */
+  margin: 5px;
   border: thin solid rgb(200,200,200);
   border-radius: 1em;
   padding: 10px;
 
-  background: white;
+  background: transparent;
   opacity: 0.8;
 }
 
