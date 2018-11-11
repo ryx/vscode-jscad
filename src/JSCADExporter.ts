@@ -7,7 +7,7 @@ export default class JSCADExporter {
 
   constructor(extensionPath: string) {
     this._extensionPath = extensionPath;
-    this._channel = vscode.window.createOutputChannel('JSCAD Export');
+    this._channel = vscode.window.createOutputChannel('JSCAD');
   }
 
   async command(commandLine: string): Promise<boolean> {
