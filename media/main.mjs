@@ -9,6 +9,6 @@ import JSCADPreview from './JSCADPreview.mjs';
 (function(vscode) {
   window.addEventListener('DOMContentLoaded', () => {
     // create our custom preview handler (@TODO: pass options)
-    const preview = new JSCADPreview(vscode, gProcessor);
+    const preview = new JSCADPreview(vscode, gProcessor, '#viewerContext');
   });
 }(acquireVsCodeApi()));

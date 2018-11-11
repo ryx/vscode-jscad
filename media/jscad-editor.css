@@ -4,17 +4,6 @@ html, body {
   height: 100%;
 }
 
-.jscad-container {
-  margin: 0; /* not inherited */
-  padding: 0; /* not inherited */
-  color: Black;
-  font-weight: bold;
-  font-family: Helvetica, Arial, Sans;
-  border: none;
-  min-width: 410px;
-  height: 100%;
-}
-
 /* hide original JSCAD viewer elements */
 #header {
   display: none;
@@ -38,23 +27,41 @@ html, body {
   display: none;
 }
 
+/* viewer container */
+.jscad-container {
+  margin: 0;
+  padding: 0;
+  background: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  font-weight: bold;
+  font-family: Helvetica, Arial, Sans;
+  border: none;
+  min-width: 410px;
+  height: 100%;
+}
+
+/* viewer control panel: container */
+
 #jscad-viewer-controls {
   opacity: 0;
   user-select: none;
   position: absolute;
   bottom: 5px;
   left: 5px;
-  background: var(--vscode-activityBar-background);
+  background: var(--vscode-editorWidget-background);
   background-blend-mode: saturation;
-  box-shadow: 0 3px 3px rgba(80, 80, 80, 0.5);
+  /*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);*/
+  box-shadow: 0 1px 2px var(--vscode-widget-shadow);
   padding: 5px;
   cursor: default;
 }
 
 .jscad-container:hover #jscad-viewer-controls {
-  opacity: 1;
+  opacity: 0.9;
   transition: all 0.3s ease-in-out;
 }
+
+/* viewer control panel: buttons */
 
 .jscad-viewer-button {
   margin: 0;
@@ -63,10 +70,11 @@ html, body {
   font-size: 16px;
   cursor: pointer;
   -webkit-mask: no-repeat 50% 50%;
-  background-color: var(--vscode-activityBar-inactiveForeground);
+  background-color: var(--vscode-editor-foreground);
+  opacity: 0.8;
 }
 .jscad-viewer-button:hover {
-  background-color: var(--vscode-activityBar-foreground);
+  opacity: 1;
 }
 
 .jscad-viewer-button-scene {
@@ -82,8 +90,21 @@ html, body {
   -webkit-mask-image: url(../resources/Icon_View_Right.svg);
 }
 
+/**
+ * vscode-light: light theme settings
+ */
+ /*
+body.vscode-light #jscad-viewer-controls {
+  background-color: var(--vscode-editorWidget-inactiveForeground);
+}*/
+/*body.vscode-light .jscad-viewer-button {
+  background-color: var(--vscode-editor-foreground);
+}*/
+
+/* MISC (needs review and better design) */
 
 #viewerContext {
+  opacity: 0;
   margin: 0;
   padding: 0px;
   width:  100%;
@@ -91,6 +112,9 @@ html, body {
   top: 0px;
   bottom: 0px;
   background: var(--vscode-editor-background);
+}
+#viewerContext.jscad-viewer-has-file {
+  opacity: 1;
 }
 
 .viewer {
@@ -156,13 +180,14 @@ canvas {
 }
 
 #updateButton {
-  margin:  5px; /* not inherited */
-  border:  thin solid Black; /* not inherited */
-  padding: 2px; /* not inherited */
-  border-radius: 4px;
-  background: white;
-
+  padding: 10px; /* not inherited */
+  border: none;
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
   margin-left: 1em;
+}
+#updateButton:hover {
+  background: var(--vscode-button-hoverBackground);
 }
 
 #tail {

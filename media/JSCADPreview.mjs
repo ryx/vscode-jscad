@@ -11,12 +11,13 @@
  * exists, we have to do it the ugly way ..
  */
 export default class JSCADPreview {
-  constructor(vscode, processor, options = {}) {
+  constructor(vscode, processor, containerId, options = {}) {
     this.vscode = vscode;
     this.processor = processor;
     this.viewer = processor.viewer;
     this.currentFileName = null;
     this.settingsCache = vscode.getState() || {};
+    this.container = document.querySelector(containerId);
 
     // register our postMessage handler to receive messages from the extension in VSCode
     window.addEventListener('message', event => this.onReceiveMessage(event));
@@ -54,10 +55,18 @@ export default class JSCADPreview {
         rendering: `Rendering`
       };
       this.sendMessageToVSCode('status', statusMap[status]);
+
+      // for debugging:
+      window.jscadViewer = this;
     };
 
     // init
-    this.setViewerBGColor(0.2, 0.2, 0.2, 1);  // @FIXME: take from options instead
+    // @FIXME: take appropriate color values from CSS instead (via getComputedStyle)
+    if (document.querySelector('body.vscode-light')) {
+      this.setViewerBGColor(0.9, 0.9, 0.9, 1);
+    } else {
+      this.setViewerBGColor(0.2, 0.2, 0.2, 1);
+    }
     this.applyInitialViewerOptions();
 
     // notify webview about being ready
@@ -79,17 +88,54 @@ export default class JSCADPreview {
   applyInitialViewerOptions() {
     this.viewer.setPlateOptions({
       draw: true,
-      size: 200,
+      size: 250,
       m: {
         i: 1, // number of units between minor grid lines
         color: {r: 0.8, g: 0.8, b: 0.8, a: 0.5} // color
       },
       M: {i:10, color: {r: 0.25, g: 0.25, b: 0.25, a: 0.5}}
     });
+    // set default face color to some theme value
+    const faceColor = this.getVSCodeThemeColor('button-background');
+    const faceColorRGB = this.parseRGBColor(faceColor);
     this.viewer.setSolidOptions({
-      faceColor: {r: 0.4, g: 0.5, b: 1.0, a: 1},        // default face color
+      faceColor: faceColorRGB,
     });
     this.viewer.onDraw();
+  }
+
+  /**
+   * Reads a color value from the VSCode theme engine by applying it to an element's background and
+   * reading rendered color as rgb() using window.getComputedStyle(). Color values are set according
+   * to the list under https://code.visualstudio.com/docs/getstarted/theme-color-reference. Dots ('.')
+   * need to be replaced with dashes ('-').
+   *
+   * @param colorName CSS representation of color name
+   */
+  getVSCodeThemeColor(colorName) {
+    const el = document.createElement('div');
+    el.style = `width: 10px; height: 10px; position: absolute; top: -100px; left: -100px; background: var(--vscode-${colorName});`;
+    document.body.appendChild(el);
+    const styles = window.getComputedStyle(el);
+    return styles.backgroundColor;
+  }
+
+  /**
+   * Parse CSS-style "rgb(r,g,b)" color value and return it as object with r/g/b(/a) properties.
+   * Throws error if color cannot be parsed.
+   */
+  parseRGBColor(color) {
+    const m = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+    if (m) {
+      return {
+        r: parseInt(m[1], 10) / 255,
+        g: parseInt(m[2], 10) / 255,
+        b: parseInt(m[3], 10) / 255,
+        a: m[4] ? parseInt(m[3], 10) / 255 : 1,
+      };
+    }
+
+    throw new Error(`JSCADVDiewer.parseRGBColor: invalid CSS color value received, ${color}`);
   }
 
   /**
@@ -137,6 +183,8 @@ export default class JSCADPreview {
       this.setViewportSettings(this.settingsCache[fileName]);
     }
     this.currentFileName = fileName;
+    // update class so we know we have content
+    this.container.classList.add('jscad-viewer-has-file');
   }
 
   /**

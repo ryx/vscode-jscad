@@ -1,6 +1,7 @@
 import * as path from 'path';
 import {
   window,
+  workspace,
   Disposable,
   StatusBarItem,
   StatusBarAlignment,
@@ -26,8 +27,7 @@ export default class JSCADPreviewPanel {
   private _disposables: Disposable[] = [];
   private _statusBarItem: StatusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
 
-  protected _onDidInitialize = new EventEmitter();
-	readonly onDidInitialize: Event<any> = this._onDidInitialize.event;
+  private onDidInitializeEmitter = new EventEmitter<void>();
 
   public static createOrShow(extensionPath: string): JSCADPreviewPanel {
     const column = window.activeTextEditor ? window.activeTextEditor.viewColumn : undefined;
@@ -91,7 +91,7 @@ export default class JSCADPreviewPanel {
         case 'initialized':
           // send event as soon as viewer application in webview is ready
           console.log('command: initialize');
-          this._onDidInitialize.fire({});
+          this.onDidInitializeEmitter.fire();
           break;
         case 'alert':
           window.showErrorMessage(message.text);
@@ -103,6 +103,10 @@ export default class JSCADPreviewPanel {
           window.showErrorMessage(`JSCAD: unknown command: ${message.command}`);
       }
     }, null, this._disposables);
+  }
+
+  public get onDidInitialize(): Event<void> {
+		return this.onDidInitializeEmitter.event;
   }
 
   public updateStatusbar(status: string) {
@@ -133,7 +137,7 @@ export default class JSCADPreviewPanel {
     // Clean up our resources
     this._panel.dispose();
     this._statusBarItem.dispose();
-    this._onDidInitialize.dispose();
+    this.onDidInitializeEmitter.dispose();
 
     // @TODO: cleanup othe resources    !
 
@@ -178,25 +182,20 @@ export default class JSCADPreviewPanel {
     const nonce = getNonce();
 
     // inject our configuration options via JSON (@FIXME: ugly, only works on hard reload of viewer panel)
+    const config = workspace.getConfiguration('jscad');
     const options = {
-      viewBackground: [],
+      defaultFaceColor: config.get('defaultFaceColor'),
     };
 
     return `<!DOCTYPE html>
     <html>
     <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <title>OpenJSCAD.org Logo</title>
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}';"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSCAD Preview</title>
-
-    <link rel="stylesheet" href="${cssUri}" nonce="${nonce}" type="text/css">
-
-    <!-- inject configuration via options object -->
-    <script type="text/javascript">var config = ${JSON.stringify(options)};</script>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+      <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}';"> -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="${cssUri}" nonce="${nonce}" type="text/css">
+      <meta name="jscad-config" content='${JSON.stringify(options)}' />
     </head>
-
     <body>
       <div class="jscad-container">
         <div id="header">
@@ -220,7 +219,6 @@ export default class JSCADPreviewPanel {
       </div>
 
       <script nonce="${nonce}" src="${coreScriptUri}"></script>
-      <!-- <script nonce="${nonce}" src="${editorScriptUri}"></script> -->
       <script nonce="${nonce}" type="module" src="${editorScriptUri}"></script>
     </body>
 
