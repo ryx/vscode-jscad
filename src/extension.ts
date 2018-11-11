@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import JSCADEditorController from './JSCADEditorController';
 import JSCADPreviewPanel from './JSCADPreviewPanel';
 import JSCADExporter from './JSCADExporter';
+import JSCADIntellisenseProvider from './JSCADIntellisenseProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,36 +16,8 @@ export function activate(context: vscode.ExtensionContext) {
   // create our exporter (@TODO: dispose)
   const exporter = new JSCADExporter(context.extensionPath);
 
-  // add intellisense
-  const completionItems:vscode.CompletionItem[] = [
-    {
-      label: 'cube',
-      detail: `@param {object} options Object with options for this cube`,
-      documentation: 'Create a cube',
-      kind: vscode.CompletionItemKind.Function
-    },
-    { label: 'cylinder', documentation: 'A cylinder' },
-    { label: 'rotate', documentation: 'Rotate the object according to given vector (expects array with vector)' },
-    { label: 'rotateX', documentation: 'Rotate the object around the X axis (expects number)' },
-    { label: 'rotateY', documentation: 'Rotate the object around the Y axis (expects number)' },
-    { label: 'rotateZ', documentation: 'Rotate the object around the Z axis (expects number)' },
-    { label: 'sphere', documentation: 'Create a sphere' },
-    { label: 'translate', documentation: 'Move the object according to given vector (expects array)' },
-  ];
-  vscode.languages.registerCompletionItemProvider({
-    language: 'javascript',
-   }, {
-    provideCompletionItems(document, position, token, context) {
-      return completionItems;
-    },
-
-    resolveCompletionItem(item:vscode.CompletionItem, token) {
-      const extendedItems = completionItems.filter(extendedItem => extendedItem.label === item.label);
-      if (extendedItems.length > 0) {
-        return extendedItems[0];
-      }
-    }
-  });
+  // register our custom intellisense provider
+  new JSCADIntellisenseProvider();
 
   // add commands
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.openPreview', () => {
@@ -53,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
   }));
 
   context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.exportAsSTL', async () => {
-    // @NOTE: I am unsure whether this should be a Task instead. We are actually bulding something
+    // @NOTE: I am unsure whether this should be a Task instead. We are actually building something
     // but on the other hand this is just a simple export :-| ... should check how other extensions
     // solve this (e.g. less/sass, etc)
 
