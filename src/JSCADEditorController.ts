@@ -14,9 +14,9 @@ import JSCADPreviewPanel from './JSCADPreviewPanel';
 export default class JSCADEditorController {
 
   private _disposable: Disposable;
-  private _updateHandle: (() => void) & {
+  public updatePanelWithEditorData: (() => void) & {
     clear(): void;
-  } | undefined;
+  };
 
   constructor() {
     // subscribe to selection change and editor activation events
@@ -28,10 +28,10 @@ export default class JSCADEditorController {
     this._disposable = Disposable.from(...subscriptions);
 
     // add debouncing to viewer update
-    this.updatePanelWithEditorData = debounce(this.updatePanelWithEditorData, 500);
+    this.updatePanelWithEditorData = debounce(this._updatePanelWithEditorData, 500);
   }
 
-  public updatePanelWithEditorData() {
+  private _updatePanelWithEditorData() {
     const panel = JSCADPreviewPanel.currentPanel;
     if (panel) {
       const editor = window.activeTextEditor;
