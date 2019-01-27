@@ -2,6 +2,7 @@
 
 TODO:
 - do not re-render view after text cursor movement or selection changes
+- viewer should work in single-pane mode and/or without a focused editor, as soon as a file has been selected (similar to Markdown Preview)
 - improve command handling and converter integration
 - fix viewer background for other theme colors
 - send global error messages to VSCode console instead of displaying them inside the "red box"
@@ -12,3 +13,4 @@ TODO:
 IDEAS:
 - visually highlight currently edited shape (maybe by injecting a setColor statement into the code passed to setJsCad? would require parsing the JSCAD code, though)
 - Snippets Library with common shapes
+- SVG importer (to import SVG paths as CSG)
