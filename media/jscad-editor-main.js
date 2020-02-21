@@ -99,11 +99,7 @@ class JSCADPreview {
     const faceColor = this.getVSCodeThemeColor('button-background');
     const faceColorRGB = this.parseRGBColor(faceColor);
     this.viewer.setSolidOptions({
-      faceColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.2}, // faceColorRGB,
-      outlineColor: {r: 1, g: 1, b: 1, a: 1}, 
-      faces: false,
-      draw: false,
-      lines: true,
+      faceColor: faceColorRGB,
     });
     this.viewer.onDraw();
   }
