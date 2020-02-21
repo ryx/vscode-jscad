@@ -169,8 +169,7 @@ export default class JSCADPreviewPanel {
   private _getHtmlForWebview(state: any = {}) {
     // Local path to main script run in the webview
     const jscadCoreScript = Uri.file(path.join(this._extensionPath, 'media', 'dist/jscad-web-opt.js'));
-    const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'main.mjs'));
-    // const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor-main.js'));
+    const jscadEditorScript = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor-main.js'));
     const jscadEditorCSS = Uri.file(path.join(this._extensionPath, 'media', 'jscad-editor.css'));
 
     // And the uri we use to load this script in the webview
@@ -219,7 +218,7 @@ export default class JSCADPreviewPanel {
       </div>
 
       <script nonce="${nonce}" src="${coreScriptUri}"></script>
-      <script nonce="${nonce}" type="module" src="${editorScriptUri}"></script>
+      <script nonce="${nonce}" src="${editorScriptUri}"></script>
     </body>
 
     </html>`;
