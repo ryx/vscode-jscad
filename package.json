@@ -4,6 +4,10 @@
   "description": "An extension to use Visual Studio Code for viewing and editing JSCAD files",
   "version": "0.0.2",
   "publisher": "ryx",
+  "repository": {
+    "type": "https",
+    "url": "https://github.com/ryx/vscode-jscad.git"
+  },
   "engines": {
     "vscode": "^1.28.0"
   },
