@@ -13,6 +13,8 @@ import JSCADPreviewPanel from './JSCADPreviewPanel';
  */
 export default class JSCADEditorController {
 
+  private _currentJSCADFileName: string = '';
+  private _previousJSCADEditor: TextEditor | undefined;
   private _disposable: Disposable;
   public updatePanelWithEditorData: (() => void) & {
     clear(): void;
@@ -21,8 +23,8 @@ export default class JSCADEditorController {
   constructor() {
     // subscribe to selection change and editor activation events
     let subscriptions: Disposable[] = [];
-    window.onDidChangeTextEditorSelection(this._onEvent, this, subscriptions);
-    window.onDidChangeActiveTextEditor(this._onEvent, this, subscriptions);
+    window.onDidChangeTextEditorSelection(this._onDidChangeTextEditorSelection, this, subscriptions);
+    window.onDidChangeActiveTextEditor(this._onDidChangeActiveTextEditor, this, subscriptions);
 
     // create a combined disposable from both event subscriptions
     this._disposable = Disposable.from(...subscriptions);
@@ -44,14 +46,25 @@ export default class JSCADEditorController {
           } else {
             panel.setJscadData(editor.document.getText(), fileName);
           }
+        } else {
+          // do we have a currently open filename?
+          console.log('JSCADEditorController._updatePanelWithEditorData: no matching fileName found');
+          console.log('this._currentJSCADFileName is ', this._currentJSCADFileName);
+        }
+      } else {
+        console.log('JSCADEditorController._updatePanelWithEditorData: no matching editor');
+        console.log('this._currentJSCADFileName is ', this._currentJSCADFileName);
+        // do we have a previously open editor? 
+        if (this._previousJSCADEditor) {
+          panel.setJscadData(this._previousJSCADEditor.document.getText(), this._currentJSCADFileName);
         }
       }
     }
-    // this.updatePanelWithEditorData.clear();
   }
 
   dispose() {
     this._disposable.dispose();
+    // this.updatePanelWithEditorData.clear();
   }
 
   private _editorHasError(editor: TextEditor) {
@@ -59,7 +72,24 @@ export default class JSCADEditorController {
     return diagnostics.filter(d => d.severity === DiagnosticSeverity.Error).length > 0;
   }
 
-  private _onEvent() {
+  private _onDidChangeTextEditorSelection() {
+    console.log('JSCADEditorController._onDidChangeActiveTextEditor');
     this.updatePanelWithEditorData();
+  }
+
+  private _onDidChangeActiveTextEditor() {
+    console.log('JSCADEditorController._onDidChangeActiveTextEditor');
+    this.updatePanelWithEditorData();
+    // remember current file
+    const editor = window.activeTextEditor;
+    if (editor) {
+      const fileName = editor.document.fileName;
+      if (fileName.match(/\.jscad$/i)) {
+        console.log('JSCADEditorController._onDidChangeActiveTextEditor: JSCAD filename is ', fileName);
+        this._currentJSCADFileName = fileName;
+        this._previousJSCADEditor = editor;
+        this.updatePanelWithEditorData();
+      }
+    }
   }
 }

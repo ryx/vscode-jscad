@@ -41,7 +41,8 @@ export default class JSCADPreviewPanel {
     // Otherwise, create a new panel.
     const panel = window.createWebviewPanel(JSCADPreviewPanel.viewType, 'JSCAD: Preview', column || ViewColumn.Two, {
       // Enable javascript in the webview
-      enableScripts: true,
+      enableScripts: true
+      // retainContextWhenHidden: true
 
       // And restric the webview to only loading content from our extension's `media` directory.
       /* localResourceRoots: [
@@ -55,6 +56,7 @@ export default class JSCADPreviewPanel {
   }
 
   public static revive(panel: WebviewPanel, extensionPath: string, state: any): JSCADPreviewPanel {
+    console.log('JSCADPreviewPanel.revive');
     JSCADPreviewPanel.currentPanel = new JSCADPreviewPanel(panel, extensionPath, state);
 
     return JSCADPreviewPanel.currentPanel;
@@ -69,6 +71,7 @@ export default class JSCADPreviewPanel {
     this._extensionPath = extensionPath;
 
     // Set the webview's initial html content and pass state
+    console.log(state);
     this._update(state);
 
     // Listen for when the panel is disposed
@@ -76,13 +79,14 @@ export default class JSCADPreviewPanel {
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
     // Update the content based on view changes
-    /* @FIXME: this causes hard reloads, which we really only want after editor changes
+    
     this._panel.onDidChangeViewState(e => {
+      console.log('JSCADPreviewPanel.onDidChangeViewState');
       if (this._panel.visible) {
-        this._update()
+        // @FIXME: this causes hard reloads, which we really only want after editor changes
+        // this._update()
       }
     }, null, this._disposables);
-    */
 
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(message => {
@@ -106,6 +110,7 @@ export default class JSCADPreviewPanel {
   }
 
   public get onDidInitialize(): Event<void> {
+    console.log('JSCADPreviewPanel.onDidInitialize');
 		return this.onDidInitializeEmitter.event;
   }
 
@@ -119,7 +124,7 @@ export default class JSCADPreviewPanel {
 
     let doc = editor.document;
 
-    // Only update status if a Markdown file
+    // Only update status if a JSCAD file
     if (doc.languageId === "javascript") {
       // Update the status bar
       this._statusBarItem.text = `JSCAD: ${status}`;
@@ -163,6 +168,7 @@ export default class JSCADPreviewPanel {
   }
 
   private _update(state: any = {}) {
+    console.log('JSCADPreviewPanel._update');
     this._panel.webview.html = this._getHtmlForWebview(state);
   }
 
