@@ -2,7 +2,7 @@
   "name": "vscode-jscad",
   "displayName": "vscode-jscad",
   "description": "An extension to use Visual Studio Code for viewing and editing JSCAD files",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "ryx",
   "repository": {
     "type": "https",
