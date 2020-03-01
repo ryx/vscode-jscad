@@ -3,6 +3,7 @@ import JSCADEditorController from './JSCADEditorController';
 import JSCADPreviewPanel from './JSCADPreviewPanel';
 import JSCADExporter from './JSCADExporter';
 import JSCADIntellisenseProvider from './JSCADIntellisenseProvider';
+import ImportPathFromSVGAction from './actions/ImportPathFromSVGAction';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -41,6 +42,42 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInformationMessage('JSCAD: STL export succeeded');
       } else {
         vscode.window.showErrorMessage('JSCAD: STL export failed (check task output for details)');
+      }
+    }
+  }));
+
+  context.subscriptions.push(vscode.commands.registerCommand('jscadEditor.importPathFromSVG', async () => {
+    // get active editor
+    const editor = vscode.window.activeTextEditor;
+    // check if file is really a *.jscad file
+    if (editor && editor.document.fileName.match(/\.jscad$/i)) {
+      // open file selection dialog and locate SVG file
+      const selectedFiles = await vscode.window.showOpenDialog({
+        filters: {
+          'SVG files': ['svg']
+        },
+      });
+      if (selectedFiles && selectedFiles.length > 0) {
+        const importer = new ImportPathFromSVGAction(selectedFiles[0].fsPath);
+        const polygonElements = importer.getPolygonsFromSVG(); 
+        if (!polygonElements) {
+          vscode.window.showErrorMessage('No <polygon> element found in provided SVG document');
+          return;
+        }
+        /*
+        if (polygonElements.length > 1) {
+          // show selection list, when multiple paths available
+          const elementName = await vscode.window.showQuickPick(['ghi', 'hghgc', '76tz', 'edfghvjb'], {
+            placeHolder: 'Choose SVG path object to import'
+          });
+        }
+        */
+        const svgString = importer.convertSVGPolygonToJSCADString(polygonElements);
+        if (!svgString) {
+          vscode.window.showErrorMessage('Failed to comvert <polygon> element to JSCAD. See error output for details.');
+          return;
+        }
+        editor.insertSnippet(new vscode.SnippetString(svgString));
       }
     }
   }));

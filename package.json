@@ -48,6 +48,11 @@
         "command": "jscadEditor.exportAsSTL",
         "title": "Export JSCAD as STL",
         "category": "JSCAD"
+      },
+      {
+        "command": "jscadEditor.importPathFromSVG",
+        "title": "Import path from SVG file",
+        "category": "JSCAD"
       }
     ],
     "languages": [
@@ -102,6 +107,8 @@
   "dependencies": {
     "@jscad/cli": "^1.10.0",
     "@types/debounce": "^3.0.0",
-    "debounce": "^1.2.0"
+    "@types/svg-parser": "^2.0.1",
+    "debounce": "^1.2.0",
+    "svg-parser": "^2.0.4"
   }
 }
